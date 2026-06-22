@@ -18,6 +18,8 @@ end
 --[[ CURSED ROCK GAP FIX ]]
 --[[ WHITEHOLE OUT SPRITE FIX ]]
 --[[ DISABLE SCRIPT_KICK FIX ]]
+--[[ PLAYER CRITS FIX ]]
+--[[ CAMERABOUND FISH SPELL FIX ]]
 
 
 local settings_names = {
@@ -28,6 +30,8 @@ local settings_names = {
 	"curse_rock_biome_gap",
 	"whitehole_out_sprite",
 	"disable_kick_luacomp",
+	"player_critical_hits",
+	"camerabound_for_fish",
 }
 local settings = {}
 
@@ -42,6 +46,8 @@ settings.mist_projectile_tags = true
 settings.curse_rock_biome_gap = true
 settings.whitehole_out_sprite = true
 settings.disable_kick_luacomp = true
+settings.player_critical_hits = true
+settings.camerabound_for_fish = true
 
 
 
@@ -150,7 +156,7 @@ end
 
 
 
----[[ WHITEHOLE OUT SPRITE FIX ]]
+--[[ WHITEHOLE OUT SPRITE FIX ]]
 -- Whitehole uses Blackhole's fade-out animation despite having a different colour palette.
 
 if settings.whitehole_out_sprite then
@@ -166,4 +172,36 @@ end
 -- This only affects the Tannerkivi in vanilla I think, normally the earthquake on kick should only apply when held or in-world.
 if settings.disable_kick_luacomp then
 	ModLuaFileAppend("data/scripts/items/stonestone.lua", "mods/userk.extended_fixes/files/appends/script_kick_disable.lua")
+end
+
+
+
+
+--[[ PLAYER CRIT FIX ]]
+-- Player cannot be crit even when jarated due to some hardcoded nonsense with a player component.
+
+if settings.player_critical_hits then
+	for xml in nxml.edit_file("data/entities/player_base.xml") do
+		xml:add_child(nxml.new_element("LuaComponent", {
+			script_damage_about_to_be_received = "mods/userk.extended_fixes/files/scripts/crit_simulator.lua"
+		}))
+	end
+end
+
+
+
+
+--[[ CAMERABOUND ON SUMMONED CREATURES FIX ]]
+-- Summoned Fish are still affected by their CameraBoundComponent despite having `_enabled="0"`.
+
+if settings.camerabound_for_fish then
+	for xml in nxml.edit_file("data/entities/projectiles/deck/fish.xml") do
+		for base in xml:each_of("Base") do
+			for elem in base:each_child() do
+				if elem.attr._enabled == "0" then
+					elem.attr._remove_from_base = "1"
+				end
+			end
+		end
+	end
 end

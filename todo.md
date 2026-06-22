@@ -1,11 +1,9 @@
 # EXTENDED FIXES
-- crit simulator if enemy has crit+ or player is jarated
 - true orbit with physics projectiles is buggy?
 - homonculous negative HP berserk attacks player?
 - chaotic transmutation deactivates first luacomp
 - intense concentrated light comp enabling
 - quantum split deleting entities
-- can MW be fixed????
 - chaos die CoV doesnt have parity with regular CoV (doesnt apply heal nicely)
 - fix orbit or whatever spams annoying-ass errors at me with cpand.
 - fix duping player if possible?
@@ -34,8 +32,14 @@
 - Creature spawning spells are limited by CameraBound despite disabling it
 - Levitation Trail is nefarious and evil (harms allies)
 
+# implemented fixes
+- crit simulator needs more effects
+  - particles
+  - text
+
 
 # cantfix
+- can MW be fixed????
 - Portals warp you to the centre
 - Particles from Cursed Rock Aura and such do not appear if their core entity is not directly on-screen
   - this does not appear to have a fix
